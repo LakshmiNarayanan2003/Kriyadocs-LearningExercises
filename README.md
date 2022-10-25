@@ -1,2 +1,3 @@
-# Kriyadocs-LearningExercises
-Weekly Learning Exercises are posted here
+# Kriyadocs-PreInternship
+
+All Code & Materials related to the internship is posted here.
