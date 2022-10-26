@@ -1,0 +1,121 @@
+<html>
+
+<head>
+    <title>Dictionary</title>
+    <link rel="stylesheet" href="./css/style.css">
+  <!--<link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />-->
+  <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+</head>
+
+<body>
+    <center><h1>Dictionary</h1></center>
+
+    <section id="formInput">
+        <center>
+            <input type="text" id="test-input" placeholder="Enter the word..">
+            <button id="submit-button" type="submit" pys-onClick="my_function">Search</button>
+        </center>
+       </section>
+ 
+  <!-- <div>Type an sample input here</div>
+  <input type="text" id="test-input"/>
+  <button id="submit-button" type="submit" pys-onClick="my_function">OK</button> -->
+  <h1 id="test-heading1"></h1><ul id="test-definition"></ul>
+  <h1 id="test-heading2"></h1><div id="test-examples"></div>
+  <h1 id="test-heading3"></h1><div id="test-synonyms"></div>
+  <h4 id="test-heading4"></h4><a id="test-source" href=""></a>
+  
+<py-script>
+from js import console
+import urllib.request, json
+from pyodide.http import pyfetch
+async def my_function(*args, **kwargs):
+    definitions=[]
+    examples=[]
+    synonyms=[]
+    sourceUrl=[]
+    document. getElementById('test-definition').innerHTML=""
+    document. getElementById('test-examples').innerHTML=""
+    document. getElementById('test-synonyms').innerHTML=""
+    document. getElementById('test-source').innerHTML=""
+    query = Element('test-input').element.value
+    queryUrl = ("https://api.dictionaryapi.dev/api/v2/entries/en/" + query)
+    respo= await pyfetch(queryUrl,method="GET")
+    output = await respo.json()
+    
+    for i in range(len(output)):
+        console.log(output[i]['word'])
+        if sourceUrl.__contains__(output[i]['sourceUrls'][0]):
+            None
+        else:
+            sourceUrl.append(output[i]['sourceUrls'][0])
+        for j in range(len(output[i]['meanings'])):
+            for k in range(len(output[i]['meanings'][j]['definitions'])):
+                definitions.append(output[i]['meanings'][j]['definitions'][k]['definition'])
+                if 'example' not in output[i]['meanings'][j]['definitions'][k]:
+                    None
+                else:
+                    if examples.__contains__(output[i]['meanings'][j]['definitions'][k]['example']):
+                        None
+                    else:
+                        examples.append(output[i]['meanings'][j]['definitions'][k]['example'])
+                
+                for l in range(len(output[i]['meanings'][j]['definitions'][k]['synonyms'])):
+                    if output[i]['meanings'][j]['definitions'][k]['synonyms']==None:
+                        None
+                    else:
+                        if synonyms.__contains__(output[i]['meanings'][j]['definitions'][k]['synonyms'][l]):
+                            None
+                        else:
+                            synonyms.append(output[i]['meanings'][j]['definitions'][k]['synonyms'][l])
+                        
+    if len(definitions)==0:
+        None
+    else:
+        pyscript.write('test-heading1','Definitions')
+    if len(examples)==0:
+        None
+    else:
+        pyscript.write('test-heading2','Examples')
+    if len(synonyms)==0:
+        None
+    else:
+        pyscript.write('test-heading3','Synonyms')
+    if len(sourceUrl)==0:
+        None
+    else:
+        pyscript.write('test-heading4','Source URL')
+
+    nav_parent = document.querySelector('#test-definition')
+    for text in definitions:
+        nav_item = document.createElement("li")
+        nav_item.textContent = text
+        nav_item.className = "nav_element"
+        nav_parent.appendChild(nav_item)
+         
+    nav_parent = document.querySelector('#test-examples')
+    for text in examples:
+        nav_item = document.createElement("li")
+        nav_item.textContent = text
+        nav_item.className = "nav_element"
+        nav_parent.appendChild(nav_item)
+         
+    nav_parent = document.querySelector('#test-synonyms')
+    for text in synonyms:
+        nav_item = document.createElement("li")
+        nav_item.textContent = text
+        nav_item.className = "nav_element"
+        nav_parent.appendChild(nav_item)
+
+        nav_parent = document.querySelector('#test-source')
+        for text in sourceUrl:
+            nav_item = document.createElement("li")
+            nav_item.textContent = text
+            nav_item.className = "nav_element"
+            nav_parent.appendChild(nav_item)
+
+    </py-script>
+  </body>
+</html>
+
+                       
